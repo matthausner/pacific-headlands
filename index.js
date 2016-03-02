@@ -32,7 +32,7 @@ app.get('/', function(request, response) {
   response.render('pages/index')
 });
 
-app.get('/login/', function(request, response) {
+app.post('/watchauth/', function(request, response) {
 
 
 var xhr = new XMLHttpRequest();
@@ -40,7 +40,25 @@ xhr.open("POST", "https://api.parse.com/1/push", true);
 xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGor");
 xhr.setRequestHeader("X-Parse-REST-API-Key", "hdZEJnIG4cD6rAbzucTHbPpJses8m9t6jrBhE7Qg");
 xhr.setRequestHeader("Content-Type", "application/json");
-//response.send(cool());
+
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4) {
+    var result = JSON.parse(xhr.responseText);
+    if (result.objectId) {
+      alert("saved an object with id: " + result.objectId);
+    }
+  }
+}
+  
+var data = JSON.stringify({ 
+        "where": {},
+         "data": {
+           "alert": "Proceed with Login?",
+           "badge": "Increment",
+           "sound": "cheering.caf",
+           "title": "Login Request!",
+           "category": "invitation" }});
+xhr.send(data);
 
 });
 
