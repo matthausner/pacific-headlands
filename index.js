@@ -1,4 +1,5 @@
 var cool = require('cool-ascii-faces');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var express = require('express');
 var app = express();
 
@@ -30,6 +31,19 @@ app.set('view engine', 'ejs');
 app.get('/', function(request, response) {
   response.render('pages/index')
 });
+
+app.get('/login/', function(request, response) {
+
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "https://api.parse.com/1/push", true);
+xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGor");
+xhr.setRequestHeader("X-Parse-REST-API-Key", "hdZEJnIG4cD6rAbzucTHbPpJses8m9t6jrBhE7Qg");
+xhr.setRequestHeader("Content-Type", "application/json");
+//response.send(cool());
+
+});
+
 
 app.get('/cool/', function(request, response) {
   response.send(cool());
