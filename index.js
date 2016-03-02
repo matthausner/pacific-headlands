@@ -27,9 +27,9 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-/*app.get('/', function(request, response) {
+app.get('/', function(request, response) {
   response.render('pages/index')
-});*/
+});
 
 app.get('/cool/', function(request, response) {
   response.send(cool());
@@ -47,6 +47,7 @@ app.get('/confaces/', function(request, response) {
 		response.send(result);
 
 });
+
 
 process.stdout.on('error', function( err ) {
     if (err.code == "EPIPE") {
