@@ -3,6 +3,26 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var express = require('express');
 var app = express();
 
+
+var passport = require('passport');
+var speakeasy = require('speakeasy');
+var QRCode = require('qrcode');
+
+
+/*var secret = speakeasy.generateSecret({length: 20});
+console.log(secret.base32); // secret of length 20
+
+QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
+  console.log(data_url); // get QR code data URL
+});*/
+
+/*var secret = speakeasy.generateSecret({length: 20});
+console.log(secret.base32); // secret of length 20
+
+QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
+  console.log(data_url); // get QR code data URL
+});*/
+
 /*var pg = require('pg');
 
 
@@ -17,6 +37,31 @@ app.get('/db/', function (request, response) {
     });
   });
 })*/
+
+
+/*passport.use(new TotpStrategy(
+    function(user, done) {
+        // The user object carries all user related information, including
+        // the shared-secret (key) and password.
+        var key = user.key;
+        if(!key) {
+            return done(new Error('No key'));
+        } else {
+            return done(null, base32.decode(key), 30); //30 = valid key period
+        }
+    })
+);*/
+
+app.post('/passport/',
+   passport.authenticate('local', { session: false }),
+  function(req, res) {
+    res.json({ id: req.user.id, username: req.user.username });
+  });
+
+
+
+
+
 
 
 
@@ -35,20 +80,31 @@ app.get('/', function(request, response) {
 app.post('/watchauth/', function(request, response) {
 
 
+var secret = speakeasy.generateSecret({length: 20});
+console.log(secret.base32); // secret of length 20
+
+QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
+  console.log(data_url); // get QR code data URL
+});
+
+
+
+
+
 var xhr = new XMLHttpRequest();
 xhr.open("POST", "https://api.parse.com/1/push", true);
-xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGo");
+xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGor");
 xhr.setRequestHeader("X-Parse-REST-API-Key", "hdZEJnIG4cD6rAbzucTHbPpJses8m9t6jrBhE7Qg");
 xhr.setRequestHeader("Content-Type", "application/json");
 
-xhr.onreadystatechange = function() {
+/*xhr.onreadystatechange = function() {
   if (xhr.readyState == 4) {
     var result = JSON.parse(xhr.responseText);
     if (result.objectId) {
       alert("saved an object with id: " + result.objectId);
     }
   }
-}
+}*/
   
 var data = JSON.stringify({ 
         "where": {},
