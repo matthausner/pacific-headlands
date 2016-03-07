@@ -2,12 +2,16 @@ var cool = require('cool-ascii-faces');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var express = require('express');
 var app = express();
-
-
-var passport = require('passport');
 var speakeasy = require('speakeasy');
 var QRCode = require('qrcode');
 
+
+
+
+/*
+var fs = require('fs');
+var Canvas = require('canvas');
+var passport = require('passport');*/
 
 /*var secret = speakeasy.generateSecret({length: 20});
 console.log(secret.base32); // secret of length 20
@@ -52,11 +56,11 @@ app.get('/db/', function (request, response) {
     })
 );*/
 
-app.post('/passport/',
+/*app.post('/passport/',
    passport.authenticate('local', { session: false }),
   function(req, res) {
     res.json({ id: req.user.id, username: req.user.username });
-  });
+  });*/
 
 
 
@@ -73,19 +77,35 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
-  response.render('pages/index')
-});
-
-app.post('/watchauth/', function(request, response) {
 
 
 var secret = speakeasy.generateSecret({length: 20});
-console.log(secret.base32); // secret of length 20
-
+//console.log(secret.base32); // secret of length 20
 QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
-  console.log(data_url); // get QR code data URL
+ //console.log(data_url); // get QR code data URL
+var token = speakeasy.totp({
+  secret: secret.base32,
+  encoding: 'base32'
 });
+
+console.log(token);
+
+
+
+app.get('/', function(request, response) {
+  response.render('pages/index')
+
+
+
+
+
+
+});
+
+app.post('/watchaut/', function(request, response) {
+
+
+
 
 
 
@@ -119,8 +139,64 @@ xhr.send(data);
 });
 
 
+app.get('/seqret/', function(request, response){
+
+
+
+  //response.writeHead(200, {'content-type': 'text/html'});
+    response.send(
+   '<div id="qrcode" title="qrcode">'+
+'<canvas width="100" height="100" style="display: none;"></canvas>'+
+'<img style="display: block;" src="'+ data_url +'"></div>'+
+'<div id="secret" title="secret">'+secret.base32+'</div>'+
+'<div id="totp" title="totp">'+token+'</div>'
+);
+
+
+
+
+
+});
+
+});
+
+
+
+
+
+
 app.get('/cool/', function(request, response) {
-  response.send(cool());
+response.send(cool());
+
+
+/*canvas = new Canvas(150, 150);
+ctx = canvas.getContext('2d');
+
+
+ctx.fillRect(0,0,150,150);   // Draw a rectangle with default settings
+ctx.save();                  // Save the default state
+
+ctx.fillStyle = '#09F'       // Make changes to the settings
+ctx.fillRect(15,15,120,120); // Draw a rectangle with new settings
+
+ctx.save();                  // Save the current state
+ctx.fillStyle = '#FFF'       // Make changes to the settings
+ctx.globalAlpha = 0.5;    
+ctx.fillRect(30,30,90,90);   // Draw a rectangle with new settings
+
+ctx.restore();               // Restore previous state
+ctx.fillRect(45,45,60,60);   // Draw a rectangle with restored settings
+
+ctx.restore();               // Restore original state
+ctx.fillRect(60,60,30,30);   // Draw a rectangle with restored settings
+var out = fs.createWriteStream(__dirname + '/state.png')
+  , stream = canvas.createPNGStream();
+
+stream.on('data', function(chunk){
+  out.write(chunk);
+});*/
+
+
 });
 
 app.listen(app.get('port'), function() {
