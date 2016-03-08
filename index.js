@@ -1,9 +1,13 @@
 var cool = require('cool-ascii-faces');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var speakeasy = require('speakeasy');
 var QRCode = require('qrcode');
+var cheerio = require('cheerio');
+//var $ = require('jquery')(window);
+//console.log(cheerio('#totpinput')[0].name);
 
 
 
@@ -83,28 +87,65 @@ var secret = speakeasy.generateSecret({length: 20});
 //console.log(secret.base32); // secret of length 20
 QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
  //console.log(data_url); // get QR code data URL
+
+
+
+
+
+app.get('/', function(request, response) {
+
 var token = speakeasy.totp({
   secret: secret.base32,
   encoding: 'base32'
 });
 
+console.log("current token");
 console.log(token);
 
+var totpInput = request.query.totpinput; 
+if (totpInput == token) {
 
 
-app.get('/', function(request, response) {
-  response.render('pages/index')
+    //response.render('Your Token Correct!!!:' +totpInput); 
+    response.writeHead(307, {Location : '/localhost:5000/watchauth/'});
+    //response.redirect('/watchauth/');
+    //response.flashMessage.push('TOTP Correct!');
+     console.log('Token Correct!!!'); 
+    }
+
+     else {
+        response.render('pages/index');
+      }
+
+
+
+  
 
 
 
 
 
 
-});
-
-app.post('/watchaut/', function(request, response) {
 
 
+
+
+
+  
+
+
+    //mytext is the name of your input box
+    //res.send('Your TOTP:' +totpInput); 
+   
+   
+}); 
+
+app.post('/watchauth/', function(request, response, next) {
+     
+
+    //var myText = request.query.pipapo.value; //mytext is the name of your input box
+    
+    //console.log(myText);
 
 
 
@@ -139,6 +180,8 @@ xhr.send(data);
 });
 
 
+
+
 app.get('/seqret/', function(request, response){
 
 
@@ -148,8 +191,8 @@ app.get('/seqret/', function(request, response){
    '<div id="qrcode" title="qrcode">'+
 '<canvas width="100" height="100" style="display: none;"></canvas>'+
 '<img style="display: block;" src="'+ data_url +'"></div>'+
-'<div id="secret" title="secret">'+secret.base32+'</div>'+
-'<div id="totp" title="totp">'+token+'</div>'
+'<div id="secret" title="secret">'+secret.base32+'</div>'
+
 );
 
 

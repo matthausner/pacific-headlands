@@ -16,12 +16,21 @@
     <h1>Log in with WatchAuthentiCator</h1>
     <p>Here you can login using the WatchAuthentiCator app on your Apple Watch. </p>
     
-    <form method="post" action="watchauth">
 
+ <form action="/" method="GET">
+    <input type="text" name="totpinput" class="textotp" required /><p>
     <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Login</button>
 </form>
 
+
+ <!--<form action="/watchauth/" method="POST">
    
+    <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Push</button>
+</form>-->
+
+ 
+
+
   </div>
 </div>
 <!--<div class="container">
@@ -54,8 +63,9 @@
    <div class="alert alert-info text-center" role="alert">
     Simply press the Login button and a push notification will be sent to your watch.
   </div>
-</div>
 
 
-</body>
-</html>
+  
+
+
+
