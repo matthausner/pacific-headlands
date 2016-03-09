@@ -14,15 +14,28 @@
       <img src="/LogoiCC.png">
     </a>
     <h1>Log in with WatchAuthentiCator</h1>
-    <p>Enter your eMail address and press Login to request authorization. </p>
+    <p>Press "Enter TOTP" if you have already enabled two-factor authentication in your app, otherwise press 'Set up 2FA". </p>
     
 
+mh232@hdm-stuttgart.de  <p>
 
+<form action="/entertotp/" method="POST">
+   
+   <!-- <input type="text" name="emailinput" class="textemail" required /></p>-->
+    <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Enter TOTP</button>
 
-<form action="/watchauth/" method="POST">
-   <p>
-   <input type="text" name="emailinput" class="textemail" required /></p>
-    <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span>Login</button>
+   
+
+</form>
+
+<p>
+<form action="/setup2fa/" method="POST">
+
+   <!-- <input type="text" name="emailinput" class="textemail" required /></p>-->
+  
+
+    <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Set up 2FA</button>
+
 </form>
 
 
@@ -63,9 +76,7 @@
   
 
 
-   <div class="alert alert-info text-center" role="alert">
-    Simply press the Push button and notification will be sent to your Apple Watch.
-  </div>
+
 
 
   

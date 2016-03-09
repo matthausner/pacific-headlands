@@ -14,16 +14,15 @@
       <img src="/LogoiCC.png">
     </a>
     <h1>Log in with WatchAuthentiCator</h1>
-    <p>Here you can login using the WatchAuthentiCator app on your Apple Watch. </p>
+    <p>Simply enter the TOTP displayed on your Apple Watch and press the Authenticate button. </p>
     
 
-
-
-<form action="/watchauth/" method="POST">
-    mh232@hdm-stuttgart.de <p>
-   <!-- <input type="text" name="emailinput" class="textemail" required /></p>-->
-    <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Push</button>
+ <form action="/authenticate" method="GET">
+    <input type="text" name="totpinput" class="textotp" required /><p>
+    <button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Authenticate</button>
 </form>
+
+
 
 
 
@@ -60,13 +59,12 @@
       </ul>
     </div>
   </div> <!-- row -->
-  
-
-
    <div class="alert alert-info text-center" role="alert">
-    Simply press the Push button and notification will be sent to your Apple Watch.
+    Simply enter the TOTP displayed on your Apple Watch and press the Authenticate button.
   </div>
 
+
+   
 
   
 

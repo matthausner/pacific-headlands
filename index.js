@@ -89,18 +89,25 @@ QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
  //console.log(data_url); // get QR code data URL
 
 
+
+
+
+
 app.get('/', function(request, response) {
 
 
 
-  response.render('pages/push');
+  response.render('pages/setup');
 
 
 });
 
 
 
-app.get('/totp/', function(request, response) {
+
+
+
+app.get('/authenticate/', function(request, response) {
 
 
 
@@ -131,7 +138,7 @@ if (totpInput == token) {
     }
 
      else {
-        response.render('pages/login');
+        response.render('pages/totp');
       }
 
 
@@ -142,7 +149,120 @@ if (totpInput == token) {
     //res.send('Your TOTP:' +totpInput); 
    
    
-}); 
+});
+
+
+app.post('/entertotp/', function(request, response, next) {
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "https://api.parse.com/1/push", true);
+xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGor");
+xhr.setRequestHeader("X-Parse-REST-API-Key", "hdZEJnIG4cD6rAbzucTHbPpJses8m9t6jrBhE7Qg");
+xhr.setRequestHeader("Content-Type", "application/json");
+
+/*xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4) {
+    var result = JSON.parse(xhr.responseText);
+    if (result.objectId) {
+      alert("saved an object with id: " + result.objectId);
+    }
+  }
+}*/
+  
+var data = JSON.stringify({ 
+        "where": {},
+         "data": {
+           "alert": "Enter TOTP",
+           "badge": "Increment",
+           "sound": "cheering.caf",
+           "title": "Enter TOTP",
+           "category": "invitation" }});
+xhr.send(data);
+
+
+response.render('pages/totp');
+
+
+});
+
+
+
+app.post('/setup2fa/', function(request, response, next) {
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "https://api.parse.com/1/push", true);
+xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGor");
+xhr.setRequestHeader("X-Parse-REST-API-Key", "hdZEJnIG4cD6rAbzucTHbPpJses8m9t6jrBhE7Qg");
+xhr.setRequestHeader("Content-Type", "application/json");
+
+/*xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4) {
+    var result = JSON.parse(xhr.responseText);
+    if (result.objectId) {
+      alert("saved an object with id: " + result.objectId);
+    }
+  }
+}*/
+  
+var data = JSON.stringify({ 
+        "where": {},
+         "data": {
+           "alert": "Scan or enter secret code",
+           "badge": "Increment",
+           "sound": "cheering.caf",
+           "title": "Scan or enter secret code",
+           "category": "invitation" }});
+xhr.send(data);
+
+
+response.send(
+
+'<!DOCTYPE html>'+
+'<html>'+
+'<head>'+
+ 
+'<title>Getting Started</title>'+
+'<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />'+
+'<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>'+
+'<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>'+
+'<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />'+
+
+'</head>'+
+
+'<body>'+
+
+
+   '<div class="jumbotron text-center">'+
+  '<div class="container">'+
+    '<a href="/" class="lang-logo">'+
+      '<img src="/LogoiCC.png">'+ 
+    '</a>'+
+    '<h1>Log in with WatchAuthentiCator</h1>'+
+    '<p>Scan or enter the code displayed below with your WatchAuthentiCator app.</p>'+
+    '</div>'+
+
+
+'<div id="qrcode" title="qrcode">'+
+'<canvas width="100" height="100"  style="display: none;"></canvas>'+
+'<center><img style="display: block;" src="'+ data_url +'"></div></center><br>'+
+'<div id="secret" title="secret">'+secret.base32+'</div><br>'+
+
+
+
+'<form action="/entertotp/" method="POST">'+
+   
+   
+    '<button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> I have scanned the code in my app</button>'+
+'</form>'+
+
+'</div>'
+
+);
+
+
+
+});
+
 
 app.post('/watchauth/', function(request, response, next) {
      
@@ -215,10 +335,46 @@ app.get('/seqret/', function(request, response){
 
   //response.writeHead(200, {'content-type': 'text/html'});
     response.send(
-   '<div id="qrcode" title="qrcode">'+
-'<canvas width="100" height="100" style="display: none;"></canvas>'+
-'<img style="display: block;" src="'+ data_url +'"></div>'+
-'<div id="secret" title="secret">'+secret.base32+'</div>'
+
+'<!DOCTYPE html>'+
+'<html>'+
+'<head>'+
+ 
+'<title>Getting Started</title>'+
+'<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />'+
+'<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>'+
+'<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>'+
+'<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />'+
+
+'</head>'+
+
+'<body>'+
+
+
+   '<div class="jumbotron text-center">'+
+  '<div class="container">'+
+    '<a href="/" class="lang-logo">'+
+      '<img src="/LogoiCC.png">'+ 
+    '</a>'+
+    '<h1>Log in with WatchAuthentiCator</h1>'+
+    '<p>Scan or enter the code displayed below with your WatchAuthentiCator app.</p>'+
+    '</div>'+
+
+
+'<div id="qrcode" title="qrcode">'+
+'<canvas width="100" height="100"  style="display: none;"></canvas>'+
+'<center><img style="display: block;" src="'+ data_url +'"></div></center><br>'+
+'<div id="secret" title="secret">'+secret.base32+'</div><br>'+
+
+
+
+'<form action="/watchauth/" method="POST">'+
+   
+   '<!-- <input type="text" name="emailinput" class="textemail" required /></p>-->'+
+    '<button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> I have scanned the code in my app</button>'+
+'</form>'+
+
+'</div>'
 
 );
 
