@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var speakeasy = require('speakeasy');
 var QRCode = require('qrcode');
-var cheerio = require('cheerio');
+//var cheerio = require('cheerio');
 //var $ = require('jquery')(window);
 //console.log(cheerio('#totpinput')[0].name);
 
@@ -89,10 +89,20 @@ QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
  //console.log(data_url); // get QR code data URL
 
 
-
-
-
 app.get('/', function(request, response) {
+
+
+
+  response.render('pages/push');
+
+
+});
+
+
+
+app.get('/totp/', function(request, response) {
+
+
 
 var token = speakeasy.totp({
   secret: secret.base32,
@@ -107,32 +117,26 @@ if (totpInput == token) {
 
 
     //response.render('Your Token Correct!!!:' +totpInput); 
-    response.writeHead(307, {Location : '/localhost:5000/watchauth/'});
+    //response.render('pages/login');
     //response.redirect('/watchauth/');
     //response.flashMessage.push('TOTP Correct!');
      console.log('Token Correct!!!'); 
+        response.send(
+   '<div id="qrcode" title="qrcode">'+
+'<canvas width="100" height="100" style="display: none;"></canvas>'+
+'<img style="display: block;" src="'+ data_url +'"></div>'+
+'<div id="secret" title="secret">'+secret.base32+'</div>'
+
+);
     }
 
      else {
-        response.render('pages/index');
+        response.render('pages/login');
       }
 
 
 
   
-
-
-
-
-
-
-
-
-
-
-
-  
-
 
     //mytext is the name of your input box
     //res.send('Your TOTP:' +totpInput); 
@@ -143,14 +147,14 @@ if (totpInput == token) {
 app.post('/watchauth/', function(request, response, next) {
      
 
-    //var myText = request.query.pipapo.value; //mytext is the name of your input box
-    
-    //console.log(myText);
 
+var emailInput = request.query.emailinput; 
+var email="mh232@hdm-stuttgart.de";
 
+if (emailInput == emailInput) {
 
-
-
+console.log(emailInput);
+console.log('eMail Correct!!!'); 
 
 var xhr = new XMLHttpRequest();
 xhr.open("POST", "https://api.parse.com/1/push", true);
@@ -177,7 +181,30 @@ var data = JSON.stringify({
            "category": "invitation" }});
 xhr.send(data);
 
+
+response.render('pages/login');
+
+
+
+}
+
+else {
+console.log(emailInput);
+console.log("Wrong email!!!");
+  response.render('pages/push');
+}
+
 });
+
+
+    //var myText = request.query.pipapo.value; //mytext is the name of your input box
+    
+    //console.log(myText);
+
+
+
+
+
 
 
 
@@ -210,6 +237,7 @@ app.get('/seqret/', function(request, response){
 
 app.get('/cool/', function(request, response) {
 response.send(cool());
+
 
 
 /*canvas = new Canvas(150, 150);
