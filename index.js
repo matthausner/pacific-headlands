@@ -97,7 +97,7 @@ app.get('/', function(request, response) {
 
 
 
-  response.render('pages/setup');
+  response.render('pages/login');
 
 
 });
@@ -129,12 +129,14 @@ if (totpInput == token) {
     //response.flashMessage.push('TOTP Correct!');
      console.log('Token Correct!!!'); 
         response.send(
-   '<div id="qrcode" title="qrcode">'+
-'<canvas width="100" height="100" style="display: none;"></canvas>'+
-'<img style="display: block;" src="'+ data_url +'"></div>'+
-'<div id="secret" title="secret">'+secret.base32+'</div>'
 
-);
+   '<h1> Your amazon.de coupon code is: <h1>'+
+   '<h2> 1234567890 <h2>');
+
+
+
+
+
     }
 
      else {
@@ -264,45 +266,23 @@ response.send(
 });
 
 
-app.post('/watchauth/', function(request, response, next) {
+app.get('/watchauth/', function(request, response) {
      
 
 
 var emailInput = request.query.emailinput; 
 var email="mh232@hdm-stuttgart.de";
 
-if (emailInput == emailInput) {
 
+if (emailInput==email) {
+
+console.log(email);
 console.log(emailInput);
 console.log('eMail Correct!!!'); 
 
-var xhr = new XMLHttpRequest();
-xhr.open("POST", "https://api.parse.com/1/push", true);
-xhr.setRequestHeader("X-Parse-Application-Id", "M6ATSuRwG0zUOSj0IXx5tDAYo52RXUNzPyhrWGor");
-xhr.setRequestHeader("X-Parse-REST-API-Key", "hdZEJnIG4cD6rAbzucTHbPpJses8m9t6jrBhE7Qg");
-xhr.setRequestHeader("Content-Type", "application/json");
-
-/*xhr.onreadystatechange = function() {
-  if (xhr.readyState == 4) {
-    var result = JSON.parse(xhr.responseText);
-    if (result.objectId) {
-      alert("saved an object with id: " + result.objectId);
-    }
-  }
-}*/
-  
-var data = JSON.stringify({ 
-        "where": {},
-         "data": {
-           "alert": "Proceed with Login?",
-           "badge": "Increment",
-           "sound": "cheering.caf",
-           "title": "Login Request!",
-           "category": "invitation" }});
-xhr.send(data);
 
 
-response.render('pages/login');
+response.render('pages/setup');
 
 
 
@@ -311,7 +291,7 @@ response.render('pages/login');
 else {
 console.log(emailInput);
 console.log("Wrong email!!!");
-  response.render('pages/push');
+  response.render('pages/login');
 }
 
 });
@@ -320,7 +300,6 @@ console.log("Wrong email!!!");
     //var myText = request.query.pipapo.value; //mytext is the name of your input box
     
     //console.log(myText);
-
 
 
 
